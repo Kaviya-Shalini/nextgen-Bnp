@@ -27,6 +27,7 @@ export default function NextGenHome() {
       try {
         const response = await axios.get("http://localhost:8080/api/stocks"); // Your backend endpoint
         setPortfolioData(response.data); // expects [{ day: "Mon", value: 22 }, ...]
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch portfolio data:", error);
       }

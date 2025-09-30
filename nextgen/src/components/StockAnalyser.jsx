@@ -63,14 +63,14 @@ export default function StockAnalyser() {
   }, []);
 
   // Fetch parameters for selected stock
-  // const handleStockClick = (symbol) => {
-  //   setSelectedStock(symbol);
-  //   setFeedback(null);
-  //   axios
-  //     .get(`http://localhost:8080/api/stocks/${symbol}/parameters`)
-  //     .then((res) => setParameters(res.data))
-  //     .catch((err) => console.error(err));
-  // };
+  const handleStockClick = (symbol) => {
+    setSelectedStock(symbol);
+    setFeedback(null);
+    axios
+      .get(`http://localhost:8080/api/stocks/${symbol}/parameters`)
+      .then((res) => setParameters(res.data))
+      .catch((err) => console.error(err));
+  };
 
   // Evaluate stock
   const handleEvaluate = () => {
