@@ -13,26 +13,27 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler
 } from "chart.js";
 
 // Register ChartJS components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend,Filler);
 
 export default function NextGenHome() {
   const [portfolioData, setPortfolioData] = useState([]);
 
   // Fetch data from API endpoint
   useEffect(() => {
-    const fetchPortfolio = async () => {
+    const fetchstock = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/stocks"); // Your backend endpoint
         setPortfolioData(response.data); // expects [{ day: "Mon", value: 22 }, ...]
-        console.log(response.data);
+        //console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch portfolio data:", error);
       }
     };
-    fetchPortfolio();
+    fetchstock();
   }, []);
 
   // Chart data

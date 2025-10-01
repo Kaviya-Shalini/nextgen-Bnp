@@ -30,24 +30,24 @@ export default function PortfolioAnalyser() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch all clients
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/clients") // Endpoint to fetch all clients
-      .then((res) => setClients(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  // Change this in the useEffect hook
+useEffect(() => {
+  axios
+    .get("http://localhost:8080/api/clients") // Changed 5000 to 8080
+    .then((res) => setClients(res.data))
+    .catch((err) => console.error(err));
+}, []);
 
-  // Evaluate client portfolio
-  const handleEvaluate = () => {
-    if (!selectedClient) return;
-    setLoading(true);
-    axios
-      .post(`http://localhost:5000/api/clients/${selectedClient}/evaluate`)
-      .then((res) => setPortfolioData(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  };
+// And change this in the handleEvaluate function
+const handleEvaluate = () => {
+  if (!selectedClient) return;
+  setLoading(true);
+  axios
+    .post(`http://localhost:8080/api/clients/${selectedClient}/evaluate`) // Changed 5000 to 8080
+    .then((res) => setPortfolioData(res.data))
+    .catch((err) => console.error(err))
+    .finally(() => setLoading(false));
+};
 
   // Search client
   const handleSearch = () => {
@@ -101,18 +101,18 @@ export default function PortfolioAnalyser() {
         <h2 className="text-2xl font-semibold mb-4">Select a Client</h2>
         <div className="flex gap-4 mb-4 flex-wrap">
           {clients.map((client) => (
-            <button
-              key={client.clientId}
-              onClick={() => setSelectedClient(client.clientId)}
-              className={`px-4 py-2 rounded-xl border text-lg font-medium transition-all hover:scale-[1.05] transform ${
-                selectedClient === client.clientId
-                  ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg"
-                  : "bg-slate-800 border-slate-700 hover:bg-slate-700"
-              }`}
-            >
-              {client.clientId}
-            </button>
-          ))}
+  <button
+    key={client}
+    onClick={() => setSelectedClient(client)}
+    className={`px-4 py-2 rounded-xl border text-lg font-medium transition-all hover:scale-[1.05] transform ${
+      selectedClient === client
+        ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg"
+        : "bg-slate-800 border-slate-700 hover:bg-slate-700"
+    }`}
+  >
+    {client}
+  </button>
+))}
         </div>
 
         {/* Search */}
