@@ -39,21 +39,24 @@ useEffect(() => {
 }, []);
 
 // And change this in the handleEvaluate function
-const handleEvaluate = () => {
-  if (!selectedClient) return;
-  setLoading(true);
-  axios
-    .post(`http://localhost:8080/api/clients/${selectedClient}/evaluate`) // Changed 5000 to 8080
-    .then((res) => setPortfolioData(res.data))
-    .catch((err) => console.error(err))
-    .finally(() => setLoading(false));
-};
+  useEffect(() => {
+    if (!selectedClient) {
+      setPortfolioData(null); // Clear data if no client is selected
+      return;
+    }
+
+    setLoading(true);
+    axios
+      .post(`http://localhost:8080/api/clients/${selectedClient}/evaluate`)
+      .then((res) => setPortfolioData(res.data))
+      .catch((err) => console.error("Evaluation failed:", err))
+      .finally(() => setLoading(false));
+  }, [selectedClient]); // This hook runs whenever `selectedClient` changes
 
   // Search client
   const handleSearch = () => {
     if (!searchTerm) return;
     setSelectedClient(searchTerm);
-    setPortfolioData(null);
   };
 
   // Pie chart for sector diversification
@@ -101,22 +104,22 @@ const handleEvaluate = () => {
         <h2 className="text-2xl font-semibold mb-4">Select a Client</h2>
         <div className="flex gap-4 mb-4 flex-wrap">
           {clients.map((client) => (
-  <button
-    key={client}
-    onClick={() => setSelectedClient(client)}
-    className={`px-4 py-2 rounded-xl border text-lg font-medium transition-all hover:scale-[1.05] transform ${
-      selectedClient === client
-        ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg"
-        : "bg-slate-800 border-slate-700 hover:bg-slate-700"
-    }`}
-  >
-    {client}
-  </button>
-))}
+            <button
+              key={client}
+              onClick={() => setSelectedClient(client)}
+              className={`px-4 py-2 rounded-xl border text-lg font-medium transition-all hover:scale-[1.05] transform ${
+                selectedClient === client
+                  ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-lg"
+                  : "bg-slate-800 border-slate-700 hover:bg-slate-700"
+              }`}
+            >
+              {client}
+            </button>
+          ))}
         </div>
 
         {/* Search */}
-        <div className="flex gap-2 items-center">
+        {/* <div className="flex gap-2 items-center">
           <input
             type="text"
             placeholder="Search Client ID"
@@ -130,17 +133,16 @@ const handleEvaluate = () => {
           >
             Search
           </button>
-          <button
-            onClick={handleEvaluate}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-green-400 to-emerald-500 font-semibold shadow-lg hover:scale-[1.05] transform transition"
-          >
-            {loading ? "Evaluating..." : "Evaluate"}
-          </button>
-        </div>
+        
+        </div> */}
       </div>
 
-      {/* Portfolio Summary */}
-      {portfolioData && (
+      {/* Loading Indicator */}
+      {loading && <div className="text-center text-lg">Evaluating...</div>}
+
+      {/* Portfolio Summary (No changes needed here) */}
+      {portfolioData && !loading && (
+        // ... rest of your JSX to display portfolio data
         <div className="max-w-6xl mx-auto p-8 bg-slate-800 rounded-3xl shadow-2xl border border-slate-700">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold">Total Portfolio Value</h2>
